@@ -1,0 +1,13 @@
+DAWG-Python==0.7.2
+certifi==2017.7.27.1
+chardet==3.0.4
+docopt==0.6.2
+falcon==1.2.0
+idna==2.5
+pymorphy2==0.8
+pymorphy2-dicts==2.4.393442.3710985
+pymorphy2-dicts-ru==2.4.404209.4415854
+python-mimeparse==1.6.0
+requests==2.18.2
+six==1.10.0
+urllib3==1.22

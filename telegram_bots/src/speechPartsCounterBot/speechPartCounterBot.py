@@ -112,18 +112,15 @@ class UpdatesReceiver():
         """
             Обработчик входящих событий
         """
-        logging.debug("right inside")
         #Инициализиурем объект сообщение
         updateObject = json.load(reader(req.bounded_stream))
         message = Message(updateObject)
         #проверяем, русский ли пришёл текст
         if(message.is_message_russian()):
-            logging.debug("русский текст")
             stats = message.get_message_stats(['noun', 'adjf', 'verb'])
             message.reply("Существительных: {noun}, Прилагательных: {adj}, Глаголов: {verb}".format(noun=stats['noun'], adj=stats['adjf'], verb=stats['verb']))
         #Если текст не русский
         else:
-            logging.debug("нерусский текст")
             message.reply("Пишите на русском языке, плз")
 
 

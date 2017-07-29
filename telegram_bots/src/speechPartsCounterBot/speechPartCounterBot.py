@@ -42,6 +42,9 @@ class YandexDictApi():
         Класс изолирующий работу с Яндекс.Словарями
     """
     def determ_speech_part(self, word):
+        """
+            Определяет часть речи
+        """
         params = {'key': YANDEX_DICT_TOKEN, 'lang': 'ru-ru', 'text': word}
         result = requests.get('https://dictionary.yandex.net/api/v1/dicservice.json/lookup', params=params)
         result = result.json()
@@ -83,6 +86,9 @@ class Message():
         return YandexTranslateApi().is_text_russian(self.message_text)
 
     def determ_pos(self, word):
+        """
+            определение части речи
+        """
         if word:
             parses = morph.parse(word)
             if len(parses) > 0:
@@ -97,6 +103,10 @@ class Message():
         else: return ''
 
     def get_message_stats(self, partsList):
+        """
+            Выдаёт статистику по частям речи в сообщении
+            partsList - Список частей речи, которые искать
+        """
         #Удаляем пунктуацию
         message = re.sub(r"[^А-Яа-яёЁ ]", '', self.message_text)
         #Разбиваем на слова
@@ -115,9 +125,15 @@ class Message():
         return result
 
     def reply(self, replyText):
+        """
+            Отправляет ответ на сообщение
+        """
         TeleBotApi().send_message(self.chat_id, replyText)
 
 class UpdatesReceiver():
+    """
+        falcon-контроллер
+    """
     def on_post(self, req, resp):
         """
             Обработчик входящих событий

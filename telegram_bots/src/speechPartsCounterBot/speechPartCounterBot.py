@@ -5,7 +5,7 @@ import codecs
 import pymorphy2
 import logging
 
-logging.basicConfig(format = u'%(levelname)-8s [%(asctime)s] %(message)s', level = logging.DEBUG, filename = u'/home/suprime/mylog.log')
+DEBUG_LOG_PATH = u'./mylog.log'
 
 reader = codecs.getreader("utf-8")
 
@@ -19,6 +19,8 @@ try:
     from local_settings import *
 except:
     pass
+
+logging.basicConfig(format = u'%(levelname)-8s [%(asctime)s] %(message)s', level = logging.DEBUG, filename = DEBUG_LOG_PATH)
 
 class TeleBotApi():
     """
@@ -61,6 +63,9 @@ class YandexTranslateApi():
         """
         params = {'key': YANDEX_TRANSLATE_TOKEN, 'text': text}
         result = requests.get('https://translate.yandex.net/api/v1.5/tr.json/detect', params=params)
+        if result.status_code == 414:
+            #Не поместилось считаем, что не русский.
+            return False
         result = result.json()
         if result['lang'] == 'ru':
             return True
@@ -78,13 +83,18 @@ class Message():
         return YandexTranslateApi().is_text_russian(self.message_text)
 
     def determ_pos(self, word):
-        parses = morph.parse(word)
-        logging.debug(parses)
-        if len(parses) > 0:
-            first_parse = parses[0]
-            return first_parse.tag.POS.lower()
-        #Какбы на случай, если словари pymorph устарели
-        return YandexDictApi().determ_speech_part(word)
+        if word:
+            parses = morph.parse(word)
+            if len(parses) > 0:
+                first_parse = parses[0]
+                try:
+                    pos = first_parse.tag.POS.lower()
+                except:
+                    pos = ''
+                return pos
+            #Какбы на случай, если словари pymorph устарели
+            return YandexDictApi().determ_speech_part(word)
+        else: return ''
 
     def get_message_stats(self, partsList):
         #Удаляем пунктуацию

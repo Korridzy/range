@@ -147,7 +147,7 @@ class UpdatesReceiver():
             message.reply("Существительных: {noun}, Прилагательных: {adj}, Глаголов: {verb}".format(noun=stats['noun'], adj=stats['adjf'], verb=stats['verb']))
         #Если текст не русский
         else:
-            message.reply("Пишите на русском языке, плз")
+            message.reply("Пишите на русском языке, плз. И не слишком длинными сообщениями.")
 
 
         
